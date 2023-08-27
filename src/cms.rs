@@ -17,7 +17,7 @@ pub struct CreateArticlePath {
     org_id: String,
 }
 
-#[post("/organizations/{org_id}/articles")]
+#[post("/articles")]
 pub async fn create_article(
     app_state: web::Data<AppState>,
     article_data: web::Json<ArticleData>,

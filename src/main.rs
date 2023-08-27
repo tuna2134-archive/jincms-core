@@ -1,24 +1,10 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
+use actix_web::{web, App, HttpServer, middleware::Logger};
 use sqlx::MySqlPool;
 use env_logger::Env;
 
 use jincms_core::AppState;
 use std::env;
 use std::sync::Mutex;
-
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -34,13 +20,18 @@ async fn main() -> std::io::Result<()> {
     let app_state = web::Data::new(app_state);
     HttpServer::new(move || {
         App::new()
-            .service(hello)
-            .service(echo)
             .service(jincms_core::user::oauth_url)
             .service(jincms_core::user::callback)
-            .service(jincms_core::org::create_organization)
-            .service(jincms_core::cms::create_article)
-            .route("/hey", web::get().to(manual_hello))
+            .service(
+                web::scope("/organizations")
+                    .service(jincms_core::org::create_organization)
+                    /*
+                    .service(
+                        web::scope("/{org_id}")
+                            .service(jincms_core::cms::create_article)
+                    )
+                    */
+            )
             .app_data(app_state.clone())
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
