@@ -37,6 +37,7 @@ async fn main() -> std::io::Result<()> {
             .service(jincms_core::cms::create_article)
             .service(jincms_core::user::oauth_url)
             .service(jincms_core::user::callback)
+            .service(jincms_core::org::create_organization)
             .route("/hey", web::get().to(manual_hello))
             .app_data(app_state.clone())
     })

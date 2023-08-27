@@ -22,23 +22,12 @@
           "char_set": 224,
           "max_size": 262140
         }
-      },
-      {
-        "ordinal": 2,
-        "name": "email",
-        "type_info": {
-          "type": "Blob",
-          "flags": "BLOB",
-          "char_set": 224,
-          "max_size": 262140
-        }
       }
     ],
     "parameters": {
       "Right": 1
     },
     "nullable": [
-      true,
       true,
       true
     ]

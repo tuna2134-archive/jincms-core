@@ -1,6 +1,7 @@
 use actix_web::{get, web, Responder};
-use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
+use jsonwebtoken::{encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Client;
+
 use serde::{Deserialize, Serialize};
 use url::Url;
 
@@ -15,7 +16,7 @@ pub struct CallbackData {
 
 #[derive(Deserialize, Debug, Serialize)]
 pub struct User {
-    id: String,
+    pub id: String,
     name: String,
     email: String,
     exp: i64,
@@ -46,9 +47,16 @@ fn create_oauth_url() -> String {
             + "&"
             + "redirect_uri=https://organic-carnival-95xr4qj69qf7g4j-8080.app.github.dev/users/callback"
             + "&"
-            + "scope=user:email"),
+            + "scope=user"),
     ));
     url.to_string()
+}
+
+pub fn verify_token(token: String) -> Result<User, jsonwebtoken::errors::Error> {
+    let key = env::var("JWT_SECRET").unwrap();
+    let token_data = jsonwebtoken::decode::<User>(&token, &DecodingKey::from_secret(key.as_ref()), &Validation::default());
+    let user = token_data.unwrap().claims;
+    Ok(user)
 }
 
 async fn fetch_access_token(code: String) -> String {
@@ -83,16 +91,15 @@ pub async fn callback(
     let client = Client::new();
     let code = data.code.clone();
     let token = fetch_access_token(code).await;
-    let user = client
+    let res = client
         .post("https://api.github.com/user")
         .header("Accept", "application/json")
         .header("Authorization", format!("Bearer {}", token))
+        .header("User-Agent", "reqwest")
         .send()
         .await
-        .unwrap()
-        .json::<serde_json::Value>()
-        .await
         .unwrap();
+    let user = res.json::<serde_json::Value>().await.unwrap();
     let user_id = user["id"].to_string();
     let pool = app_state.pool.lock().unwrap();
     let data = sqlx::query!("SELECT * FROM User WHERE id = ?", user_id)
@@ -101,10 +108,9 @@ pub async fn callback(
         .unwrap();
     if data.is_none() {
         sqlx::query!(
-            "INSERT INTO User VALUES (?, ?, ?)",
+            "INSERT INTO User VALUES (?, ?)",
             user_id,
             user["name"].to_string(),
-            user["email"].to_string(),
         )
         .execute(&*pool)
         .await
