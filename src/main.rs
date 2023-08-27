@@ -22,16 +22,10 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(jincms_core::user::oauth_url)
             .service(jincms_core::user::callback)
-            .service(
-                web::scope("/organizations")
-                    .service(jincms_core::org::create_organization)
-                    /*
-                    .service(
-                        web::scope("/{org_id}")
-                            .service(jincms_core::cms::create_article)
-                    )
-                    */
-            )
+            .service(jincms_core::org::create_organization)
+            .service(jincms_core::cms::create_article)
+            .service(jincms_core::cms::get_article)
+            .service(jincms_core::cms::get_articles)
             .app_data(app_state.clone())
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))

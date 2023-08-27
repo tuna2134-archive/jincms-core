@@ -13,7 +13,7 @@ pub struct OrganizationData {
     users: Vec<String>,
 }
 
-#[post("/")]
+#[post("/organizations")]
 pub async fn create_organization(
     app_state: web::Data<AppState>,
     organization_data: web::Json<OrganizationData>,
