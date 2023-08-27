@@ -14,7 +14,7 @@ jobs:
     - name: Test
       run: |
         SQLX_OFFLINE=true cargo build -r
-        mv jincms-core jincms-core.bin
+        mv target/release/jincms-core jincms-core.bin
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
