@@ -45,7 +45,7 @@ fn create_oauth_url() -> String {
     url.set_query(Some(
         &(client_id
             + "&"
-            + "redirect_uri=https://organic-carnival-95xr4qj69qf7g4j-8080.app.github.dev/users/callback"
+            + format!("redirect_uri={}", env::var("GITHUB_REDIRECT_URI").unwrap()).as_str()
             + "&"
             + "scope=user"),
     ));
@@ -66,10 +66,7 @@ async fn fetch_access_token(code: String) -> String {
     form.insert("client_id", env::var("GITHUB_CLIENT_ID").unwrap());
     form.insert("client_secret", env::var("GITHUB_CLIENT_SECRET").unwrap());
     form.insert("code", code);
-    form.insert(
-        "redirect_uri",
-        "https://organic-carnival-95xr4qj69qf7g4j-8080.app.github.dev/users/callback".to_string(),
-    );
+    form.insert("redirect_uri", env::var("GITHUB_REDIRECT_URI").unwrap());
     let client = Client::new();
     let data = client
         .post("https://github.com/login/oauth/access_token")
