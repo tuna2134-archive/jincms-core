@@ -31,8 +31,8 @@ fn create_token(user_id: String, user_name: String, email: String) -> String {
     let claims = User {
         id: user_id,
         name: user_name,
-        email: email,
-        exp: exp,
+        email,
+        exp,
     };
     let key = env::var("JWT_SECRET").unwrap();
     let token = encode(&header, &claims, &EncodingKey::from_secret(key.as_ref())).unwrap();
