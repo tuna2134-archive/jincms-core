@@ -31,6 +31,7 @@ async fn main() -> std::io::Result<()> {
             .service(jincms_core::cms::create_article)
             .service(jincms_core::cms::get_article)
             .service(jincms_core::cms::get_articles)
+            .service(jincms_core::cms::delete_article)
             .app_data(app_state.clone())
             .wrap(cors)
             .wrap(Logger::default())
