@@ -1,0 +1,12 @@
+{
+  "db_name": "MySQL",
+  "query": "DELETE FROM Article WHERE orgId = ? AND slug = ?",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": []
+  },
+  "hash": "03e3c361bba32438c1af4d19be953f754f63378312bf2197ef7cb6b697f45326"
+}
