@@ -1,6 +1,6 @@
-use actix_web::{web, App, HttpServer, middleware::Logger};
-use sqlx::MySqlPool;
+use actix_web::{middleware::Logger, web, App, HttpServer};
 use env_logger::Env;
+use sqlx::MySqlPool;
 
 use jincms_core::AppState;
 use std::env;

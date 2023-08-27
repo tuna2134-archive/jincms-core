@@ -1,6 +1,6 @@
-use crate::AppState;
 use crate::user::verify_token;
-use actix_web::{get, post, web, HttpResponse, Responder, HttpRequest};
+use crate::AppState;
+use actix_web::{get, post, web, HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
@@ -8,7 +8,7 @@ pub struct ArticleData {
     slug: String,
     title: String,
     description: String,
-    author: String,
+    author: Option<String>,
     body: String,
 }
 
@@ -38,12 +38,30 @@ pub async fn create_article(
     let check = {
         let data = sqlx::query!(
             "SELECT * FROM OrganizationMember WHERE orgId = ? AND userId = ?",
-            path.org_id, user.id
-        ).fetch_optional(&*pool).await.unwrap();
+            path.org_id,
+            user.id
+        )
+        .fetch_optional(&*pool)
+        .await
+        .unwrap();
         data.is_some()
     };
     if !check {
         return HttpResponse::Forbidden().body("Forbidden");
+    }
+    let already_exists = {
+        let data = sqlx::query!(
+            "SELECT * FROM Article WHERE orgId = ? AND slug = ?",
+            path.org_id,
+            article_data.slug
+        )
+        .fetch_optional(&*pool)
+        .await
+        .unwrap();
+        data.is_some()
+    };
+    if already_exists {
+        return HttpResponse::Conflict().body("Conflict");
     }
     sqlx::query!(
         "INSERT INTO Article VALUES (?, ?, ?, ?, ?, ?)",
@@ -51,9 +69,12 @@ pub async fn create_article(
         article_data.slug,
         article_data.title,
         article_data.description,
-        article_data.author,
+        user.id,
         article_data.body,
-    ).execute(&*pool).await.unwrap();
+    )
+    .execute(&*pool)
+    .await
+    .unwrap();
     HttpResponse::Ok().body("Created")
 }
 
@@ -63,17 +84,17 @@ pub async fn get_articles(
     path: web::Path<CreateArticlePath>,
 ) -> impl Responder {
     let pool = app_state.pool.lock().unwrap();
-    let data = sqlx::query!(
-        "SELECT * FROM Article WHERE orgId = ?",
-        path.org_id
-    ).fetch_all(&*pool).await.unwrap();
+    let data = sqlx::query!("SELECT * FROM Article WHERE orgId = ?", path.org_id)
+        .fetch_all(&*pool)
+        .await
+        .unwrap();
     let mut articles = Vec::new();
     for article in data {
         articles.push(ArticleData {
             slug: article.slug.unwrap(),
             title: article.title.unwrap(),
             description: article.description.unwrap(),
-            author: article.authorId.unwrap(),
+            author: article.authorId,
             body: article.body.unwrap(),
         });
     }
@@ -94,8 +115,12 @@ pub async fn get_article(
     let pool = app_state.pool.lock().unwrap();
     let data = sqlx::query!(
         "SELECT * FROM Article WHERE orgId = ? AND slug = ?",
-        path.org_id, path.slug
-    ).fetch_optional(&*pool).await.unwrap();
+        path.org_id,
+        path.slug
+    )
+    .fetch_optional(&*pool)
+    .await
+    .unwrap();
     if data.is_none() {
         return HttpResponse::NotFound().body("Not Found");
     }
@@ -105,6 +130,6 @@ pub async fn get_article(
         title: data.title.unwrap(),
         description: data.description.unwrap(),
         body: data.body.unwrap(),
-        author: data.authorId.unwrap(),
+        author: data.authorId,
     })
 }

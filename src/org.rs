@@ -1,10 +1,8 @@
-use actix_web::{
-    Responder, HttpResponse, web, post, HttpRequest,
-};
+use actix_web::{post, web, HttpRequest, HttpResponse, Responder};
 use serde::Deserialize;
 
-use crate::AppState;
 use crate::user::verify_token;
+use crate::AppState;
 
 #[derive(Deserialize)]
 pub struct OrganizationData {
@@ -31,13 +29,23 @@ pub async fn create_organization(
     let pool = app_state.pool.lock().unwrap();
     sqlx::query!(
         "INSERT INTO Organization VALUES (?, ?, ?)",
-        organization_data.id, organization_data.name, user.id
-    ).execute(&*pool).await.unwrap();
+        organization_data.id,
+        organization_data.name,
+        user.id
+    )
+    .execute(&*pool)
+    .await
+    .unwrap();
     for user in organization_data.users.iter() {
         sqlx::query!(
             "INSERT INTO OrganizationMember VALUES (?, ?, ?)",
-            organization_data.id, user, "owner"
-        ).execute(&*pool).await.unwrap();
+            organization_data.id,
+            user,
+            "owner"
+        )
+        .execute(&*pool)
+        .await
+        .unwrap();
     }
     HttpResponse::Ok().body("Created")
 }

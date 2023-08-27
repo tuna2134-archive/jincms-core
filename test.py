@@ -18,7 +18,6 @@ r = requests.post("http://localhost:8080/organizations/test/articles", headers={
     "title": "Test Article",
     "slug": "test-article2",
     "body": "This is a test article",
-    "author": "45692264",
     "description": "This is a test article"
 })
 

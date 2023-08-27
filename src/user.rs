@@ -1,4 +1,4 @@
-use actix_web::{get, web, Responder, HttpResponse};
+use actix_web::{get, web, HttpResponse, Responder};
 use jsonwebtoken::{encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Client;
 
@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 use url::Url;
 
 use crate::AppState;
-use std::env;
 use std::collections::HashMap;
+use std::env;
 
 #[derive(Deserialize)]
 pub struct CallbackData {
@@ -55,7 +55,8 @@ fn create_oauth_url() -> String {
 pub fn verify_token(token: String) -> Result<User, jsonwebtoken::errors::Error> {
     let key = env::var("JWT_SECRET").unwrap();
     let validation = Validation::new(Algorithm::HS512);
-    let token_data = jsonwebtoken::decode::<User>(&token, &DecodingKey::from_secret(key.as_ref()), &validation);
+    let token_data =
+        jsonwebtoken::decode::<User>(&token, &DecodingKey::from_secret(key.as_ref()), &validation);
     let user = token_data.unwrap().claims;
     Ok(user)
 }
