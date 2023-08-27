@@ -6,6 +6,7 @@ use url::Url;
 
 use crate::AppState;
 use std::env;
+use std::collections::HashMap;
 
 #[derive(Deserialize)]
 pub struct CallbackData {
@@ -50,25 +51,20 @@ fn create_oauth_url() -> String {
     url.to_string()
 }
 
-#[get("/users/callback")]
-pub async fn callback(
-    data: web::Query<CallbackData>,
-    app_state: web::Data<AppState>,
-) -> impl Responder {
+async fn fetch_access_token(code: String) -> String {
+    let mut form = HashMap::new();
+    form.insert("client_id", env::var("GITHUB_CLIENT_ID").unwrap());
+    form.insert("client_secret", env::var("GITHUB_CLIENT_SECRET").unwrap());
+    form.insert("code", code);
+    form.insert(
+        "redirect_uri",
+        "https://organic-carnival-95xr4qj69qf7g4j-8080.app.github.dev/users/callback".to_string(),
+    );
     let client = Client::new();
-    let code = data.code.clone();
-    let req_data = format!("client_id={}", env::var("GITHUB_CLIENT_ID").unwrap())
-        + "&"
-        + format!("client_secret={}", env::var("GITHUB_CLIENT_SECRET").unwrap()).as_str()
-        + "&"
-        + format!("code={}", code).as_str()
-        + "&"
-        + "redirect_uri=https://organic-carnival-95xr4qj69qf7g4j-8080.app.github.dev/users/callback";
-    println!("{}", req_data);
     let data = client
         .post("https://github.com/login/oauth/access_token")
         .header("Accept", "application/json")
-        .body(req_data)
+        .form(&form)
         .send()
         .await
         .unwrap()
@@ -76,7 +72,17 @@ pub async fn callback(
         .await
         .unwrap();
     println!("{:?}", data);
-    let token = data["access_token"].as_str().unwrap();
+    data["access_token"].as_str().unwrap().to_string()
+}
+
+#[get("/users/callback")]
+pub async fn callback(
+    data: web::Query<CallbackData>,
+    app_state: web::Data<AppState>,
+) -> impl Responder {
+    let client = Client::new();
+    let code = data.code.clone();
+    let token = fetch_access_token(code).await;
     let user = client
         .post("https://api.github.com/user")
         .header("Accept", "application/json")
