@@ -1,5 +1,6 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware::Logger};
 use sqlx::MySqlPool;
+use env_logger::Env;
 
 use jincms_core::AppState;
 use std::env;
@@ -22,6 +23,7 @@ async fn manual_hello() -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
     let pool = MySqlPool::connect(&env::var("DATABASE_URL").unwrap())
         .await
         .unwrap();
@@ -34,12 +36,14 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
-            .service(jincms_core::cms::create_article)
             .service(jincms_core::user::oauth_url)
             .service(jincms_core::user::callback)
             .service(jincms_core::org::create_organization)
+            .service(jincms_core::cms::create_article)
             .route("/hey", web::get().to(manual_hello))
             .app_data(app_state.clone())
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
     })
     .bind(("0.0.0.0", 8080))?
     .run()

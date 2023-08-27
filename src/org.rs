@@ -31,7 +31,7 @@ pub async fn create_organization(
     let pool = app_state.pool.lock().unwrap();
     sqlx::query!(
         "INSERT INTO Organization VALUES (?, ?, ?)",
-        organization_data.name, organization_data.id, user.id
+        organization_data.id, organization_data.name, user.id
     ).execute(&*pool).await.unwrap();
     for user in organization_data.users.iter() {
         sqlx::query!(

@@ -54,7 +54,8 @@ fn create_oauth_url() -> String {
 
 pub fn verify_token(token: String) -> Result<User, jsonwebtoken::errors::Error> {
     let key = env::var("JWT_SECRET").unwrap();
-    let token_data = jsonwebtoken::decode::<User>(&token, &DecodingKey::from_secret(key.as_ref()), &Validation::default());
+    let validation = Validation::new(Algorithm::HS512);
+    let token_data = jsonwebtoken::decode::<User>(&token, &DecodingKey::from_secret(key.as_ref()), &validation);
     let user = token_data.unwrap().claims;
     Ok(user)
 }
