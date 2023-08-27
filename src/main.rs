@@ -1,9 +1,9 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use sqlx::MySqlPool;
 
+use jincms_core::AppState;
 use std::env;
 use std::sync::Mutex;
-use jincms_core::AppState;
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -26,7 +26,9 @@ async fn main() -> std::io::Result<()> {
         .await
         .unwrap();
     sqlx::migrate!().run(&pool).await.unwrap();
-    let app_state = AppState { pool: Mutex::new(pool) };
+    let app_state = AppState {
+        pool: Mutex::new(pool),
+    };
     let app_state = web::Data::new(app_state);
     HttpServer::new(move || {
         App::new()

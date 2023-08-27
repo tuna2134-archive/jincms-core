@@ -1,12 +1,10 @@
-use actix_web::{
-    Responder, HttpResponse, web, get, 
-};
-use jsonwebtoken::{encode, Header, Algorithm, EncodingKey};
-use serde::{Deserialize, Serialize};
+use actix_web::{get, web, Responder};
+use jsonwebtoken::{encode, Algorithm, EncodingKey, Header};
 use reqwest::Client;
+use serde::{Deserialize, Serialize};
 
-use std::env;
 use crate::AppState;
+use std::env;
 
 #[derive(Deserialize)]
 pub struct CallbackData {
@@ -39,16 +37,23 @@ fn create_token(user_id: String, user_name: String, email: String) -> String {
 }
 
 #[get("/users/callback")]
-pub async fn callback(data: web::Query<CallbackData>, app_state: web::Data<AppState>) -> impl Responder {
+pub async fn callback(
+    data: web::Query<CallbackData>,
+    app_state: web::Data<AppState>,
+) -> impl Responder {
     let client = Client::new();
     let code = data.code.clone();
-    let data = client.post("https://github.com/login/oauth/access_token")
+    let data = client
+        .post("https://github.com/login/oauth/access_token")
         .header("Accept", "application/json")
         .form(&[
             ("client_id", env::var("GITHUB_CLIENT_ID").unwrap()),
             ("client_secret", env::var("GITHUB_CLIENT_SECRET").unwrap()),
             ("code", code),
-            ("redirect_uri", "http://localhost:8080/users/callback".to_string()),
+            (
+                "redirect_uri",
+                "http://localhost:8080/users/callback".to_string(),
+            ),
         ])
         .send()
         .await
@@ -57,7 +62,8 @@ pub async fn callback(data: web::Query<CallbackData>, app_state: web::Data<AppSt
         .await
         .unwrap();
     let token = data["access_token"].as_str().unwrap();
-    let user = client.post("https://api.github.com/user")
+    let user = client
+        .post("https://api.github.com/user")
         .header("Accept", "application/json")
         .header("Authorization", format!("Bearer {}", token))
         .send()
@@ -68,17 +74,20 @@ pub async fn callback(data: web::Query<CallbackData>, app_state: web::Data<AppSt
         .unwrap();
     let user_id = user["id"].to_string();
     let pool = app_state.pool.lock().unwrap();
-    let data = sqlx::query!(
-        "SELECT * FROM User WHERE id = ?",
-        user_id
-    ).fetch_optional(&*pool).await.unwrap();
+    let data = sqlx::query!("SELECT * FROM User WHERE id = ?", user_id)
+        .fetch_optional(&*pool)
+        .await
+        .unwrap();
     if data.is_none() {
         sqlx::query!(
             "INSERT INTO User VALUES (?, ?, ?)",
             user_id,
             user["name"].to_string(),
             user["email"].to_string(),
-        ).execute(&*pool).await.unwrap();
+        )
+        .execute(&*pool)
+        .await
+        .unwrap();
     }
     // create jwt token
     let token = create_token(user_id, user["name"].to_string(), user["email"].to_string());
