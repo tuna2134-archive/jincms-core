@@ -1040,6 +1040,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
+ "url",
 ]
 
 [[package]]
