@@ -1,6 +1,6 @@
 use crate::user::verify_token;
 use crate::AppState;
-use actix_web::{get, post, delete, web, HttpRequest, HttpResponse, Responder};
+use actix_web::{delete, get, post, web, HttpRequest, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
@@ -24,7 +24,6 @@ pub async fn create_article(
     path: web::Path<CreateArticlePath>,
     req: HttpRequest,
 ) -> impl Responder {
-    println!("RUnn");
     let token = {
         let headers = req.headers();
         let authorization = headers.get("Authorization").unwrap();
@@ -116,16 +115,25 @@ pub async fn delete_article(
     let is_exists = {
         sqlx::query!(
             "SELECT * FROM Article WHERE orgId = ? AND slug = ?",
-            path.org_id, path.slug
-        ).fetch_optional(&*pool).await.unwrap().is_some()
+            path.org_id,
+            path.slug
+        )
+        .fetch_optional(&*pool)
+        .await
+        .unwrap()
+        .is_some()
     };
     if !is_exists {
         return HttpResponse::NotFound().body("Not found");
     }
     sqlx::query!(
         "DELETE FROM Article WHERE orgId = ? AND slug = ?",
-        path.org_id, path.slug
-    ).execute(&*pool).await.unwrap();
+        path.org_id,
+        path.slug
+    )
+    .execute(&*pool)
+    .await
+    .unwrap();
     HttpResponse::Ok().body("Deleted")
 }
 

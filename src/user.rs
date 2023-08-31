@@ -20,9 +20,10 @@ pub struct User {
     name: String,
     email: String,
     exp: i64,
+    login: Option<String>,
 }
 
-fn create_token(user_id: String, user_name: String, email: String) -> String {
+fn create_token(user_id: String, user_name: String, email: String, login: String) -> String {
     let mut header = Header::default();
     header.alg = Algorithm::HS512;
     header.typ = Some("JWT".to_string());
@@ -33,6 +34,7 @@ fn create_token(user_id: String, user_name: String, email: String) -> String {
         name: user_name,
         email,
         exp,
+        login: Some(login),
     };
     let key = env::var("JWT_SECRET").unwrap();
     let token = encode(&header, &claims, &EncodingKey::from_secret(key.as_ref())).unwrap();
@@ -116,7 +118,12 @@ pub async fn callback(
         .unwrap();
     }
     // create jwt token
-    let token = create_token(user_id, user["name"].to_string(), user["email"].to_string());
+    let token = create_token(
+        user_id,
+        user["name"].to_string(),
+        user["email"].to_string(),
+        user["login"].to_string(),
+    );
     let responde_data = serde_json::json!({
         "token": token,
     });
