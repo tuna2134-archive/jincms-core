@@ -27,6 +27,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(jincms_core::user::oauth_url)
             .service(jincms_core::user::callback)
+            .service(jincms_core::user::get_me)
             .service(jincms_core::org::create_organization)
             .service(jincms_core::cms::create_article)
             .service(jincms_core::cms::get_article)

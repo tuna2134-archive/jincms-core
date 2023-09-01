@@ -1,4 +1,4 @@
-use actix_web::{get, web, HttpResponse, Responder};
+use actix_web::{get, web, HttpResponse, HttpRequest, Responder};
 use jsonwebtoken::{encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Client;
 
@@ -17,7 +17,7 @@ pub struct CallbackData {
 #[derive(Deserialize, Debug, Serialize)]
 pub struct User {
     pub id: String,
-    name: String,
+    pub name: String,
     email: String,
     exp: i64,
     login: Option<String>,
@@ -136,6 +136,31 @@ pub async fn oauth_url() -> impl Responder {
     web::Json(serde_json::json!({
         "url": url,
     }))
+}
+
+#[get("/users/me")]
+pub async fn get_me(
+    app_state: web::Data<AppState>,
+    req: HttpRequest,
+) -> impl Responder {
+    let token = {
+        let headers = req.headers();
+        let authorization = headers.get("Authorization").unwrap();
+        let token = authorization.to_str().unwrap();
+        // split token
+        let token = token.split(" ").collect::<Vec<&str>>();
+        token[1]
+    };
+    let user = verify_token(token.to_string()).unwrap();
+    let pool = app_state.pool.lock().unwrap();
+    let data = sqlx::query!("SELECT * FROM User WHERE id = ?", user.id)
+        .fetch_optional(&*pool)
+        .await
+        .unwrap();
+    if data.is_none() {
+        return HttpResponse::NotFound().body("Not Found");
+    }
+    HttpResponse::Ok().json(user)
 }
 
 #[derive(Deserialize, Serialize)]
