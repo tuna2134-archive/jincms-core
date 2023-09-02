@@ -9,7 +9,8 @@ interface Organization {
 
 export default async function Page() {
   const cookieStore = cookies();
-  const token = cookieStore.get('token')
+  const token = cookieStore.get('token');
+  console.log(token);
   if (token === undefined) {
     return <p>ログインし直してください</p>
   };
