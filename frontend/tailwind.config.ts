@@ -15,6 +15,7 @@ const config: Config = {
       },
       fontFamily: {
         roboto: ["var(--font-roboto)"],
+        nsj: ["var(--font-noto-sans-jp"],
       }
     },
   },
