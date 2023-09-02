@@ -94,7 +94,7 @@ export const Header = () => {
           ) : (
             <Link
               href="/login"
-              className="bg-pink-500 text-white rounded px-4 py-1 text-2xl"
+              className="bg-pink-500 text-white rounded px-4 py-1 text-xl"
             >
               login
             </Link>
