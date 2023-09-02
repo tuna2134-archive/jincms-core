@@ -20,7 +20,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
       console.log(data);
       setUser(data);
     })();
-  }, [setUser]);
+  }, [setUser, userid]);
   const handleLogout = () => {
     destroyCookie(null, "token");
     window.location.href = "/";
