@@ -13,7 +13,7 @@ export const Header = () => {
     } else {
       setLogin(true);
     }
-  });
+  }, [setLogin]);
   return (
     <header className="border-b">
       <div className='max-w-4xl w-full mx-auto h-16 items-center flex'>
