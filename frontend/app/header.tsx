@@ -46,7 +46,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="p-2 text-[#fc0303] hover:bg-slate-50 flex"
+                  className="p-2 text-[#fc0303] hover:bg-slate-50 flex space-w-4 justify-center"
                 >
                   <span className="material-symbols-outlined">logout</span>
                   <p>Logout</p>
