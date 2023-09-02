@@ -30,10 +30,10 @@ export default async function Page() {
         <h2 className="text-3xl text-bold">Select organizations</h2>
         <div className="mt-2 border rounded">
           {data.map((org) => (
-            <div key={org.id} className="p-2 border">
+            <div key={org.id} className="p-2 hover:bg-slate-50">
               <Link
                 href={"/dashboard/" + org.id}
-                className="p-1 rounded hover:bg-slate-100 w-full h-full"
+                className="p-1 hover:bg-slate-100 w-full h-full"
               >
                 {org.name}
               </Link>
