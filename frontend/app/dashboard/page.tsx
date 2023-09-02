@@ -10,6 +10,9 @@ interface Organization {
 export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')
+  if (token === undefined) {
+    return <p>ログインし直してください</p>
+  };
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/organizations`,
     {
