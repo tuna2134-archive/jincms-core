@@ -25,10 +25,10 @@ export default async function Page() {
   console.log(res);
   const data: Organization[] = await res.json();
   return (
-    <div className="bg-pink-50 w-full flex justify-center items-center min-h-screen">
+    <div className="w-full flex justify-center items-center min-h-screen">
       <div>
         <h2 className="text-3xl text-bold">Select organizations</h2>
-        <div className="mt-2 border rounded">
+        <div className="mt-2 border rounded-lg">
           {data.map((org) => (
             <div key={org.id} className="p-2 hover:bg-slate-50">
               <Link
