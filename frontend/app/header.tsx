@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from 'next/link'
-import { parseCookies } from "nookies";
+import { parseCookies, destroyCookie } from "nookies";
 import { fetchUser, User } from "./_components/user";
 
 interface GithubUser {
@@ -21,6 +21,10 @@ const UserMenu = ({ userid }: { userid: string }) => {
       setUser(data);
     })();
   }, [setUser]);
+  const handleLogout = () => {
+    destroyCookie(null, 'token');
+    window.location.href = '/';
+  };
   return (
     <div>
       <button onClick={openModal}>
@@ -30,9 +34,9 @@ const UserMenu = ({ userid }: { userid: string }) => {
         <div className="absolute border w-48 rounded">
           <div className="bg-white">
             <div className="flex flex-col">
-              <Link href="/dashboard" className="p-2 text-center border-b">Dashboard</Link>
-              <button className="p-2">
-                <p className="text-[#fc0303]">Logout</p>
+              <Link href="/dashboard" className="p-2 text-center border-b hover:bg-slate-50">Dashboard</Link>
+              <button onClick={handleLogout} className="p-2 text-[#fc0303] hover:bg-slate-50">
+                Logout
               </button>
             </div>
           </div>
