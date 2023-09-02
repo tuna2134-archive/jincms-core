@@ -4,6 +4,7 @@ on:
   push:
     tags:
     - "v*.*.*"
+    branches: [main]
 
 permissions:
   contents: write
@@ -14,7 +15,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Test
+    - name: Install depend
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libssl3 pkg-config
+    - uses: dtolnay/rust-toolchain@stable
+    - name: Build binary
       run: |
         SQLX_OFFLINE=true cargo build -r
         mv target/release/jincms-core jincms-core.bin

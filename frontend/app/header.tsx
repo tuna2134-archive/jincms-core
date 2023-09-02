@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { parseCookies, destroyCookie } from "nookies";
 import { fetchUser, User } from "./_components/user";
 
@@ -20,7 +21,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
       console.log(data);
       setUser(data);
     })();
-  }, [setUser]);
+  }, [setUser, userid]);
   const handleLogout = () => {
     destroyCookie(null, "token");
     window.location.href = "/";
@@ -28,27 +29,31 @@ const UserMenu = ({ userid }: { userid: string }) => {
   return (
     <div>
       <button onClick={openModal}>
-        <img
-          src={user?.avatar_url}
+        <Image
+          src={user?.avatar_url as string}
           className="w-10 h-10 rounded-full inline-block"
+          alt="user icon"
         />
       </button>
       {isOpen && (
-        <div className="absolute border w-48 rounded">
-          <div className="bg-white">
-            <div className="flex flex-col">
-              <Link
-                href="/dashboard"
-                className="p-2 text-center border-b hover:bg-slate-50"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="p-2 text-[#fc0303] hover:bg-slate-50"
-              >
-                Logout
-              </button>
+        <div className="relative">
+          <div className="absolute w-48 right-0 top-0 border rounded">
+            <div className="bg-white">
+              <div className="flex flex-col">
+                <Link
+                  href="/dashboard"
+                  className="p-2 text-center border-b hover:bg-slate-50"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-[#fc0303] hover:bg-slate-50 flex space-w-4 justify-center"
+                >
+                  <span className="material-symbols-outlined">logout</span>
+                  <p>Logout</p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -73,7 +78,7 @@ export const Header = () => {
         setUser(userData);
       })();
     }
-  });
+  }, [setUser]);
   return (
     <header className="border-b">
       <div className="max-w-4xl w-full mx-auto h-16 items-center flex">

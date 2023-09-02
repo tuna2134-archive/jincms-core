@@ -25,7 +25,7 @@ export default function Page() {
       console.log(data);
       setOrgs(data);
     })();
-  }, [setOrgs]);
+  }, [setOrgs, token]);
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div>
@@ -43,8 +43,9 @@ export default function Page() {
           ))}
         </div>
         <div className="mt-4">
-          <button className="border rounded w-full p-2 text-green-500">
-            Add
+          <button className="border rounded w-full p-2 text-green-500 flex space-w-4 justify-center">
+            <span className="material-symbols-outlined">add</span>
+            <p>Add</p>
           </button>
         </div>
       </div>
