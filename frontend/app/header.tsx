@@ -34,8 +34,8 @@ const UserMenu = ({ userid }: { userid: string }) => {
         />
       </button>
       {isOpen && (
-        <div className="relative w-48">
-          <div className="absolute left-0 top-0 border rounded">
+        <div className="relative w-12">
+          <div className="absolute w-48 left-0 top-0 border rounded">
             <div className="bg-white">
               <div className="flex flex-col">
                 <Link
