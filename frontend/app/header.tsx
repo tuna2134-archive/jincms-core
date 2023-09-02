@@ -34,21 +34,23 @@ const UserMenu = ({ userid }: { userid: string }) => {
         />
       </button>
       {isOpen && (
-        <div className="absolute border w-48 rounded">
-          <div className="bg-white">
-            <div className="flex flex-col">
-              <Link
-                href="/dashboard"
-                className="p-2 text-center border-b hover:bg-slate-50"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="p-2 text-[#fc0303] hover:bg-slate-50"
-              >
-                Logout
-              </button>
+        <div className="relative w-48">
+          <div className="absolute left-0 top-0 border rounded">
+            <div className="bg-white">
+              <div className="flex flex-col">
+                <Link
+                  href="/dashboard"
+                  className="p-2 text-center border-b hover:bg-slate-50"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-[#fc0303] hover:bg-slate-50"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         </div>
