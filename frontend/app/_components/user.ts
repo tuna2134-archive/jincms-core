@@ -6,7 +6,7 @@ export interface User {
 }
 
 export async function fetchUser(token: string): Promise<User | undefined> {
-  const res = await fetch("http://localhost:8080/users/me", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

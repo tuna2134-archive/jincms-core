@@ -9,7 +9,7 @@ export default function Page() {
       const code = url.searchParams.get("code");
       console.log(code);
       const res = await fetch(
-        `http://localhost:8080/users/callback?code=${code}`,
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/users/callback?code=${code}`,
       );
       const data = await res.json();
       setCookie(null, "token", data.token, {

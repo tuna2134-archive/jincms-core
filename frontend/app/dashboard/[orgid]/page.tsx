@@ -1,7 +1,5 @@
 import React from "react";
 
 export default function Page({ params }: { params: { orgid: string } }) {
-  return (
-    <p>hello</p>
-  )
-};
+  return <p>hello</p>;
+}

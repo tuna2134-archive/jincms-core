@@ -1,20 +1,20 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import Link from 'next/link'
-import { Header } from './header'
+import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Link from "next/link";
+import { Header } from "./header";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'jincms',
-  description: 'いろいろ',
-}
+  title: "jincms",
+  description: "いろいろ",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -23,5 +23,5 @@ export default function RootLayout({
         {children}
       </body>
     </html>
-  )
+  );
 }
