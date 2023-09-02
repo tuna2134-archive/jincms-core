@@ -25,7 +25,7 @@ export default function Page() {
       console.log(data);
       setOrgs(data);
     })();
-  }, [setOrgs]);
+  }, [setOrgs, token]);
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div>
