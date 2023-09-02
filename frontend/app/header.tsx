@@ -2,43 +2,6 @@
 import React from "react";
 import Link from 'next/link'
 import { parseCookies } from "nookies";
-import { fetchUser, User } from "./_components/user";
-
-interface GithubUser {
-  login: string;
-  avatar_url: string;
-}
-
-const UserMenu = ({ userid }: {
-  userid: string
-}) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [user, setUser] = React.useState<GithubUser | undefined>(undefined);
-  const openModal = () => setIsOpen(!isOpen);
-
-  React.useEffect(() => {
-    (async () => {
-      const res = await fetch("https://api.github.com/users/" + userid);
-      const data = await res.json();
-      console.log(data);
-      setUser(data);
-    })();
-  }, [setUser]);
-  return (
-    <div>
-      <button onClick={openModal}>
-        <img src={user?.avatar_url} alt={user?.login} className="w-10 h-10 rounded-full" />
-      </button>
-      {isOpen &&
-        <div className="absolute w-64 bg-white rounded border">
-          <div className="p-2 flex flex-col">
-            <Link href="/dashboard" className="p-1 rounded hover:bg-slate-100 w-full h-full">dashboard</Link>
-          </div>
-        </div>
-      }
-    </div>
-  )
-}
 
 export const Header = () => {
   const [user, setUser] = React.useState<User | undefined>(undefined);
@@ -55,7 +18,7 @@ export const Header = () => {
         };
       })();
     }
-  }, [setUser]);
+  });
   return (
     <header className="border-b">
       <div className='max-w-4xl w-full mx-auto h-16 items-center flex'>
