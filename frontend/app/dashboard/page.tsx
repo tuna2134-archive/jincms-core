@@ -41,7 +41,7 @@ export default async function Page() {
           ))}
         </div>
         <div className="mt-4">
-          <button className="border rounded w-full p-2 text-green-500 flex space-w-4 justify-center">
+          <button className="border rounded hover:bg-slate-100 w-full p-2 text-green-500 flex space-w-4 justify-center">
             <span className="material-symbols-outlined">add</span>
             <p>Add</p>
           </button>
