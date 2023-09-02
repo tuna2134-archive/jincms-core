@@ -13,7 +13,7 @@ export default function Page() {
       setCookie(null, 'token', data.token, {
         maxAge: 30 * 24 * 60 * 60,
       });
-      window.location.href = '/';
+      window.location.href = '/dashboard';
     };
     fetchToken();
   });

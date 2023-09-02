@@ -1,4 +1,4 @@
-use actix_web::{get, web, HttpResponse, HttpRequest, Responder};
+use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 use jsonwebtoken::{encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
 use reqwest::Client;
 
@@ -139,10 +139,7 @@ pub async fn oauth_url() -> impl Responder {
 }
 
 #[get("/users/me")]
-pub async fn get_me(
-    app_state: web::Data<AppState>,
-    req: HttpRequest,
-) -> impl Responder {
+pub async fn get_me(app_state: web::Data<AppState>, req: HttpRequest) -> impl Responder {
     let token = {
         let headers = req.headers();
         let authorization = headers.get("Authorization").unwrap();
