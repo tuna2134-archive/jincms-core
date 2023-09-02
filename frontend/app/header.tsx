@@ -30,7 +30,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
     <div>
       <button onClick={openModal}>
         <Image
-          src={user?.avatar_url}
+          src={user?.avatar_url as string}
           className="w-10 h-10 rounded-full inline-block"
         />
       </button>
