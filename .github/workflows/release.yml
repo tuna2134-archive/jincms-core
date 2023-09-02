@@ -18,7 +18,7 @@ jobs:
     - name: Install depend
       run: |
         sudo apt-get update
-        sudo apt-get install -y libssl-dev
+        sudo apt-get install -y libssl3
     - name: Build binary
       run: |
         SQLX_OFFLINE=true cargo build -r
