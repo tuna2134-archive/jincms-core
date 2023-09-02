@@ -28,12 +28,13 @@ const UserMenu = ({ userid }: { userid: string }) => {
   };
   return (
     <div>
-      <button onClick={openModal}>
+      <button onClick={openModal} className="space-w-2 flex">
         <Image
           src={user?.avatar_url as string}
           className="w-10 h-10 rounded-full inline-block"
           alt="user icon"
         />
+        <span className="material-symbols-outlined">expand_more</span>
       </button>
       {isOpen && (
         <div className="relative">
