@@ -28,7 +28,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
   };
   return (
     <div>
-      <button onClick={openModal} className="space-w-2 flex">
+      <button onClick={openModal} className="space-w-2 flex items-center">
         <Image
           src={user?.avatar_url as string}
           className="w-10 h-10 rounded-full inline-block"
