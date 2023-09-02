@@ -10,7 +10,5 @@ export default function Page() {
     };
     checkLink();
   });
-  return (
-    <p>ページ転移します。</p>
-  )
+  return <p>ページ転移します。</p>;
 }

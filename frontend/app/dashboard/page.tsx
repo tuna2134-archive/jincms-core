@@ -9,7 +9,7 @@ interface Organization {
 }
 
 export default function Page() {
-  const  [orgs, setOrgs] = React.useState<Organization[]>([]);
+  const [orgs, setOrgs] = React.useState<Organization[]>([]);
   const token = parseCookies().token;
   React.useEffect(() => {
     (async () => {
@@ -30,16 +30,21 @@ export default function Page() {
         <div className="mt-2 border rounded">
           {orgs.map((org) => (
             <div key={org.id} className="p-2 border">
-              <Link href={"/dashboard/" + org.id}className="p-1 rounded hover:bg-slate-100 w-full h-full">
+              <Link
+                href={"/dashboard/" + org.id}
+                className="p-1 rounded hover:bg-slate-100 w-full h-full"
+              >
                 {org.name}
               </Link>
             </div>
           ))}
         </div>
         <div className="mt-4">
-          <button className="border rounded w-full p-2 text-green-500">Add</button>
+          <button className="border rounded w-full p-2 text-green-500">
+            Add
+          </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

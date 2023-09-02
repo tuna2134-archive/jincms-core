@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 export interface User {
   name: string;
@@ -8,12 +8,12 @@ export interface User {
 export async function fetchUser(token: string): Promise<User | undefined> {
   const res = await fetch("http://localhost:8080/users/me", {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    method: "GET"
+    method: "GET",
   });
   if (!res.ok) {
     return undefined;
   }
   return await res.json();
-};
+}
