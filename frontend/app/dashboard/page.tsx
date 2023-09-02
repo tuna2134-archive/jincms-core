@@ -18,7 +18,7 @@ export default async function Page() {
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/organizations`,
     {
       headers: {
-        Authorization: "Bearer " + token,
+        Authorization: "Bearer " + token.value,
       },
     },
   );
