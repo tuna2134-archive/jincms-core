@@ -25,7 +25,7 @@ export default async function Page() {
   console.log(res);
   const data: Organization[] = await res.json();
   return (
-    <div className="bg-pink-100 w-full flex justify-center items-center min-h-screen">
+    <div className="bg-pink-50 w-full flex justify-center items-center min-h-screen">
       <div>
         <h2 className="text-3xl text-bold">Select organizations</h2>
         <div className="mt-2 border rounded">
