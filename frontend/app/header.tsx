@@ -32,6 +32,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
         <Image
           src={user?.avatar_url as string}
           className="w-10 h-10 rounded-full inline-block"
+          alt-"user icon"
         />
       </button>
       {isOpen && (
