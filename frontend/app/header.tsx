@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { parseCookies, destroyCookie } from "nookies";
 import { fetchUser, User } from "./_components/user";
 
@@ -28,7 +29,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
   return (
     <div>
       <button onClick={openModal}>
-        <img
+        <Image
           src={user?.avatar_url}
           className="w-10 h-10 rounded-full inline-block"
         />
