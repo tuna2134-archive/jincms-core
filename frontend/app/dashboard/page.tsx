@@ -1,6 +1,5 @@
-"use client";
 import Link from "next/link";
-import { parseCookies } from "nookies";
+import { cookies } from "next/headers";
 import React from "react";
 
 interface Organization {
@@ -8,30 +7,24 @@ interface Organization {
   name: string;
 }
 
-export default function Page() {
-  const [orgs, setOrgs] = React.useState<Organization[]>([]);
-  const token = parseCookies().token;
-  React.useEffect(() => {
-    (async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/organizations`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        },
-      );
-      const data = await res.json();
-      console.log(data);
-      setOrgs(data);
-    })();
-  }, [setOrgs, token]);
+export default async function Page() {
+  const cookieStore = cookies();
+  const token = cookieStore.get('token')
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/organizations`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
+  );
+  const data: Organization[] = await res.json();
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div>
         <h2 className="text-3xl text-bold">Select organizations</h2>
         <div className="mt-2 border rounded">
-          {orgs.map((org) => (
+          {data.map((org) => (
             <div key={org.id} className="p-2 border">
               <Link
                 href={"/dashboard/" + org.id}
