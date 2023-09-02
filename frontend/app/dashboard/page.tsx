@@ -21,6 +21,7 @@ export default async function Page() {
       },
     },
   );
+  console.log(res);
   const data: Organization[] = await res.json();
   return (
     <div className="flex justify-center items-center min-h-screen">
