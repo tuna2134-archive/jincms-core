@@ -34,7 +34,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
           className="w-10 h-10 rounded-full inline-block"
           alt="user icon"
         />
-        <span className="material-symbols-outlined">expand_more</span>
+        <span className={isOpen ? "material-symbols-outlined" : "material-symbols-outlined"}>expand_more</span>
       </button>
       {isOpen && (
         <div className="relative">
