@@ -37,7 +37,7 @@ const UserMenu = ({ userid }: { userid: string }) => {
         <span className="material-symbols-outlined">{isOpen ? "expand_less" : "expand_more"}</span>
       </button>
       {isOpen && (
-        <div className="relative transition easy-out duration-150 delay-150 translate-y-6">
+        <div className="relative transition easy-in-out duration-150 delay-150 translate-y-6">
           <div className="absolute w-48 right-0 top-0 border rounded">
             <div className="bg-white">
               <div className="flex flex-col">
