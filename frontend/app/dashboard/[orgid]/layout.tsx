@@ -20,6 +20,46 @@ export default function Page({
       id: "articles",
       name: "Articles",
     },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
   ];
   return (
     <div className="max-w-6xl mx-auto w-full">
@@ -33,7 +73,7 @@ export default function Page({
             </div>
           ))}
         </div>
-        <div className="w-3/4">{children}</div>
+        <div className="w-3/4 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
