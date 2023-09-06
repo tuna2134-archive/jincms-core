@@ -34,7 +34,7 @@ export default function Page({
           ))}
         </div>
         <div className="w-3/4 overflow-y-auto">
-          <div className="w-full max-w-4xl">
+          <div className="w-full max-w-4xl mx-auto">
             {children}
           </div>
         </div>
