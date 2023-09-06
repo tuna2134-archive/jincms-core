@@ -60,6 +60,30 @@ export default function Page({
       id: "articles",
       name: "Articles",
     },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
+    {
+      id: "articles",
+      name: "Articles",
+    },
   ];
   return (
     <div className="max-w-6xl mx-auto w-full">
