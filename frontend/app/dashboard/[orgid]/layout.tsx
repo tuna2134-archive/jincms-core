@@ -33,7 +33,7 @@ export default function Page({
             </div>
           ))}
         </div>
-        <div className="fixed w-3/4">{children}</div>
+        <div className="w-3/4">{children}</div>
       </div>
     </div>
   );
