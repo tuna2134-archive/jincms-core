@@ -33,7 +33,11 @@ export default function Page({
             </div>
           ))}
         </div>
-        <div className="w-3/4 overflow-y-auto">{children}</div>
+        <div className="w-3/4 overflow-y-auto">
+          <div className="w-full max-w-4xl">
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );
