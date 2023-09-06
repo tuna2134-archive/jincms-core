@@ -97,7 +97,7 @@ export default function Page({
             </div>
           ))}
         </div>
-        <div className="w-3/4 overflow-y-auto">{children}</div>
+        <div className="w-3/4 overflow-y-auto h-screen">{children}</div>
       </div>
     </div>
   );
