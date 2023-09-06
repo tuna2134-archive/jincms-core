@@ -88,7 +88,7 @@ export default function Page({
   return (
     <div className="max-w-6xl mx-auto w-full">
       <div className="w-full flex min-h-screen">
-        <div className="w-1/4 border-r h-screen overscroll-y-auto">
+        <div className="w-1/4 border-r h-full overscroll-y-auto">
           {settings.map((setting) => (
             <div key={setting.id} className="py-4 px-6 border-b">
               <Link href={setting.id} className="text-2xl">
@@ -97,7 +97,7 @@ export default function Page({
             </div>
           ))}
         </div>
-        <div className="w-3/4 overflow-y-auto h-screen">{children}</div>
+        <div className="w-3/4 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
